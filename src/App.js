@@ -4,7 +4,7 @@ import { A, navigate, useRoutes } from "hookrouter";
 function HomePage() {
   return (
     <div>
-      <p>HomePage</p>
+      <A href="/other">Second</A>
     </div>
   );
 }
@@ -12,16 +12,17 @@ function HomePage() {
 function AnotherPage() {
   return (
     <div>
-      <p>AnotherPage</p>
-      <A href="/third">Third</A>
+      <A href="/third/andre/matthieu">Users Page</A>
     </div>
   );
 }
 
-function ThirdPage() {
+function ThirdPage(props) {
   return (
     <div>
-      <p>3</p>
+      {props.nom}
+      {props.prenom}
+      <A href="/home">First</A>
     </div>
   );
 }
@@ -35,23 +36,15 @@ function NonExistentPage() {
 }
 
 const routes = {
-  "/": () => <App />,
   "/home": () => <HomePage />,
   "/other": () => <AnotherPage />,
-  "/third": () => <ThirdPage />
+  "/third/:nom/:prenom": ({ prenom, nom }) => (
+    <ThirdPage nom={nom} prenom={prenom} />
+  )
 };
 
 export default function App() {
   const routeResult = useRoutes(routes);
 
-  return (
-    <div className="App">
-      <A href="/">Superhome</A>
-      <br />
-      <A href="/home">Home</A>
-      <br />
-      <A href="/other">Another</A>
-      {routeResult || <NonExistentPage />}
-    </div>
-  );
+  return <div className="App">{routeResult || <HomePage />}</div>;
 }
